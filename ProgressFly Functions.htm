@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<html>
+<head>
+<title>ProgressFly Usage Instructions</title>
+
+<style type="text/css">
+<!--
+body {background: #58494e; font: 76% Verdana, Geneva, Arial, Helvetica, sans-serif; color: #444; margin: 0;}
+#container {margin: 0 auto; padding: 30px; background-color: #fff; border: 1px solid black; line-height: 1.7em; color: black; width: 783px;}
+h1 { font: normal 2.8em 'trebuchet ms', verdana, sans-serif; padding-top: 15px; }
+h2 {border-bottom: 1px solid #d1c1c7; color: #333; padding-bottom: 2px; font: normal 1.7em 'lucida sans unicode', 'lucida grande', sans-serif; }
+h3 {border-bottom: 1px solid #ddd; color: #333; padding-bottom: 2px; font: normal 1.4em 'lucida sans unicode', 'lucida grande', sans-serif; padding-top: 20px; }
+h4 {font: 1.2em 'lucida sans unicode', 'lucida grande', sans-serif; padding-bottom: 2 px; padding-top: 15px;}
+.quotecode {margin: 0em 3em; padding: 1em 3em; background: #cccccc;}
+ul li, ol li {list-style: square; margin-bottom: 1em;}
+-->
+</style>
+
+
+
+</head>
+<body>
+<div id="container">
+<h1>ProgressFly Function Calls</h1>
+<p>ProgressFly has three main functions, one for embedding a meter into a post or page, and two for displaying your meters in your templates. The latter two will require you to modify your template, but don't worry, it's very easy.</p>
+<h2>Embedding A Meter</h2>
+<p>To embed a progress meter into a post or page, simply drop the following string into the text editor when you create your post or page:</p>
+<p class="quotecode">&#91;pfmeter id=# target=# progress=# display=# precision=#&#93;</p>
+<p>where:</p>
+<ul>
+	<li><strong>id=# (required):</strong> The ID number of the meter you wish to display</li>
+	<li><strong>target=# progress=# (optional):</strong> This part of the string gives you the option of manually specifying the target and progress. If you specify a number for both, the meter will be static, that is, it won't change when you update the database values. This is useful for those of you who like to post daily metrics to chart your progress. If you would prefer the meter to be dynamic, and update accordingly whenever you update the database values, omit this part of the string.</li>
+	<li><strong>display=# (optional):</strong> This will dictate which kind of meter you wish to display. If this part of the string is omitted, the default meter will be displayed. The options for this variable are:
+	<ul>
+		<li><strong>1:</strong> "css" &#8211; The default display (title + meter + units and progress in subtext)</li>
+		<li><strong>2:</strong> "cssbare" &#8211; A stripped-back version of the meter (title + meter with % progress displayed internall, no subtext)</li>
+		<li><strong>3:</strong> "preview" &#8211; The meter, and only the meter (no title or progress text or subtext</li>
+	</ul> </li>
+	<li><strong>precision=# (optional):</strong> This specifies the number of decimal places to display. If omitted, the meter will display according to the default option specified in the database.</li></ul>
+
+<h4>Example Code</h4>
+<p>If you wish to display progress meter with id number 4, which is dynamic, and you're happy with the defaults:</p>
+<p class="quotecode">&#91;pfmeter id=4&#93;</p>
+<p>If you wish to display progress meter with id number 4, which is currently at 40% and make sure it's static, and you're happy with the defaults:</p>
+<p class="quotecode">&#91;pfmeter id=4 target=10 progress=4&#93;</p>
+<p>If you wish to display progress meter with id number 4, keep it dynamic, but you want the "cssbare" display with two decimal places:</p>
+<p class="quotecode">&#91;pfmeter id=4 display="cssbare" precision=2&#93;</p>
+
+<br />
+<h2>Template Functions</h2>
+<p>To display any of your progress meters outside of posts or pages, you will need to modify the template where you wish the meters to display.</p><p>Navigate to the appropriate template page (most people choose to edit sidebar.php, for example), find the lines in the template where you wish the meters to display, and enter the appropriate function call (see below) into the code.</p><p>I am working on widgetising ProgressFly for an upcoming release.</p> 
+<h3>Print A Single Meter</h3>
+<p>To display a single meter, copy and paste the following code into your template:</p>
+<p class="quotecode">&lt;?php pf_specific($wipid, $metertype, $globalprec, $precision); ?&gt;</p>
+<p>where:</p>
+<ul>
+	<li><strong>$wipid (required):</strong> The id number of the meter you wish to display</li>
+	<li><strong>$metertype (optional):</strong> This will dictate which kind of meter you wish to display. If this part of the string is omitted, the default meter will be displayed. The options for this variable are:
+	<ul>
+		<li><strong>"css"</strong> &#8211; The default display (title + meter + units and progress in subtext)</li>
+		<li><strong>"cssbare"</strong> &#8211; A stripped-back version of the meter (title + meter with % progress displayed internall, no subtext)</li>
+		<li><strong>"preview"</strong> &#8211; The meter, and only the meter (no title or progress text or subtext</li>
+	</ul> </li>
+	<li><strong>$globalprec (optional):</strong> Omit or specify <strong>"yes"</strong> if you want the progress meter to display using the default precision; specify <strong>"no"</strong> if you wish to manually specify the number of decimal places the meter should display</li>
+	<li><strong>$precision (optional):</strong> This specifies the number of decimal places to display. If omitted, the meter will display according to the default option. <em>$globalprec must be "no" for this option to work.</em></li></ul>
+
+<h4>Example Code</h4>
+<p>If you wish to display meter with id number 4, and you're happy with the default options:</p>
+<p class="quotecode">&lt;?php pf_specific(4); ?&gt;</p>
+<p>If you wish to display meter with id number 4, but you want the "cssbare" display:</p>
+<p class="quotecode">&lt;?php pf_specific(4,"cssbare"); ?&gt;</p>
+<p>If you wish to display meter with id number 4, and you want the "css" display with one decimal place:</p>
+<p class="quotecode">&lt;?php pf_specific(4,"css","no",1); ?&gt;</p>
+
+<h3>Print A List Of Meters</h3>
+<p>To print a list of progress meters, copy and paste the following code into your template:</p>
+<p class="quotecode">&lt;?php pf_printprojects($limit, $display, $complete, $category, $orderby, $orderdxn, $visible, $globalprecision, $precision); ?&gt;</p>
+<p>where:</p>
+<p>where:</p>
+<ul>
+	<li><strong>$limit (defaults to -1):</strong> The number of meters to display. If you wish to display only 5, stick 5 in there. If you wish to display all meters, specify -1.</li>
+	<li><strong>$metertype (optional):</strong> This will dictate which kind of meter you wish to display. If this part of the string is omitted, the default meter will be displayed. The options for this variable are:
+	<ul>
+		<li><strong>"css" (default)</strong> &#8211; The default display (title + meter + units and progress in subtext)</li>
+		<li><strong>"cssbare"</strong> &#8211; A stripped-back version of the meter (title + meter with % progress displayed internall, no subtext)</li>
+		<li><strong>"preview"</strong> &#8211; The meter, and only the meter (no title or progress text or subtext</li>
+	</ul> </li>
+	<li><strong>$complete (optional; defaults to "no"):</strong> Choose "yes" to display only completed projects, "no" to display only incomplete projects, or "all" to display both complete and incomplete</li>
+	<li><strong>$category (optional; defaults to "all"):</strong> If you specify a category name here, the function will display only meters tagged with that category. If you omit this variable, or specify "all", the function will display all categories.</li>
+	<li><strong>$orderby (optional; defaults to id):</strong> Specify the variable on which to sort the meters: "wipid" (the id), "title", "target", "progress", "units", "pfcategory" (the category), "complete"</li>
+	<li><strong>$orderdxn (optional; defaults to DESC):</strong> Specify ASC or DESC to sort ascending or descending</li>
+	<li><strong>$visible (optional; defaults to "yes"):</strong> Specify <strong>"yes"</strong> to display only meters marked as visible, <strong>"all"</strong> to display all</li>
+	<li><strong>$globalprec (optional):</strong> Omit or specify <strong>"yes"</strong> if you want the progress meter to display using the default precision; specify <strong>"no"</strong> if you wish to manually specify the number of decimal places the meter should display</li>
+	<li><strong>$precision (optional):</strong> This specifies the number of decimal places to display. If omitted, the meter will display according to the default option. <em>$globalprec must be "no" for this option to work.</em></li></ul>
+
+<h4>Example Code</h4>
+<p>If you wish to display the last 5 meters of incomplete projects, and you're happy with the defaults:</p>
+<p class="quotecode">&lt;?php pf_printprojects(5); ?&gt;</p>
+<p>If you wish to display all incomplete projects, and you're happy with the defaults:</p>
+<p class="quotecode">&lt;?php pf_printprojects(); ?&gt;</p>
+<p>If you wish to display all complete projects, and you're happy with the defaults:</p>
+<p class="quotecode">&lt;?php pf_printprojects(-1,"css","yes"); ?&gt;</p>
+<br />
+<h2>The Meters</h2>
+<h4>"css" (Default)</h4>
+
+<h3 style="margin: 15px 0px 5px 0px; padding: 0; border: none; font-size: 1em">Title</h3>
+	<div style="border: 1px solid #000000; background-color: #FFFFFF; height: 15px; width: 100px; margin: 0; padding: 0; display: table;">
+		<div style="width: 40%; background-color: #000000; height: 13px; margin: 1px; padding:0;"></div>
+	</div>
+	<p style="margin: 5px 0px 15px 0px; padding: 0; color: #333333; font-size: 0.9em;">units: 4 / 10 (40%)</p>
+
+<h4>"cssbare"</h4>
+
+            <h3 style="margin: 15px 0px 5px 0px; padding: 0; border: none; font-size: 1em">Title</h3>
+        <div style="border: 1px solid #000000; background-color: #FFFFFF; height: 15px; width: 100px; margin: 0; padding: 0; display: table;">
+                <div style="width: 40%; background-color: #999; height: 13px; margin: 1px; padding:0;"></div>
+								<span style="margin-top: -13px; font-weight: bold; color: #333333; font-size: 0.85em; float: left; padding-left: 45%; line-height: 1em;">40%</span>
+        </div>
+
+<h4>"preview"</h4>
+
+	<div style="border: 1px solid #000000; background-color: #FFFFFF; height: 15px; width: 100px; margin: 0; padding: 0; display: table;">
+		<div style="width: 40%; background-color: #000000; height: 13px; margin: 1px; padding:0;"></div>
+	</div>
+	
+<h4>A Note On CSS</h4>
+<p>The meters are styled entirely using CSS, which makes them highly customisable. (And also a little bit fiddly. Thus is the joy of the multi-browser internet!)</p>
+<p>If you want the progressbar to display as a picture instead of a solid colour, you can do this: simply create a slice of the picture you wish to use as a background tile and, in the "Progress Bar" variable, specify "background: #progresscolor url(path/to/image) top left repeat;" (replace "progresscolor" with whatever color you have specified in the Progress Color variable; it's a good idea to specify a color in case the picture doesn't load properly) and:</p> 
+
+            <h3 style="margin: 15px 0px 5px 0px; padding: 0; border: none; font-size: 1em">Title</h3>
+        <div style="border: 1px solid #000000; background-color: #FFFFFF; height: 15px; width: 100px; margin: 0; padding: 0; display: table;">
+                <div style="width: 40%; background-color: #999; height: 13px; margin: 1px; padding:0; background: #999 url(pfbg.gif) top left repeat;"></div>
+								<span style="margin-top: -13px; font-weight: bold; color: #333333; font-size: 0.85em; float: left; padding-left: 45%; line-height: 1em;">40%</span>
+        </div>
+
+<p>Voila! The most boring background picture ever, but it's an example. (Note to those reading this page from inside their zip program: your browser won't be able to find the picture. Extract this page and pfbg.gif to the same directory and the example should load properly.)</p>
+<p>So go wild and crazy. Make sure you test the display in a variety of browsers to ensure you know and are happy with what your visitors will be seeing, and make sure you hardcode the image path (ie, use the full url, not any shortcuts or abbreviations, to make sure the browser can always find your image).</p>
+<p>I've tried to make ProgressFly user-friendly even for those who know very little CSS, but mucking with the freestyle variables will require a knowledge of CSS. If you want some tips and tricks, the best place to start is <a href="http://www.w3schools.com/css/default.asp">W3 Schools tutorials</a>.
+
+
+
+</div> <!--#container-->
+</body>
+</html>
